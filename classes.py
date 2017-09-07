@@ -36,13 +36,16 @@ class Queue(object):
 class linked_list(object):
 	#last is last element and double_link asks if it is double_linked
 	#use a pointer array so that two lists can interact and store memory in the same place
-	def __init__(self, pointer_array = range(0,10), init = 0, double_linked = False):
+	def __init__(self, pointer_array = [], init = -1, double_linked = False):
 		self.list = pointer_array
+		self.list.append(None)
 		self.init = init
-		self.root = self.Node(None,None,None)
-		self.list[init] = self.root
+		if self.init == -1:
+			self.init = len(pointer_array)-1
+		self.list[self.init] = self.Node(None,None,None)
+		self.root =self.list[self.init]
 		self.double_linked=double_linked
-		self.last = init
+		self.last = self.init
 	class Node(object):
 		def __init__(self,key,next,prev=None):
 			self.key = key
@@ -62,6 +65,8 @@ class linked_list(object):
 				return old.next
 			else:
 				old = new
+		return None
+		
 	def add_node(self,key):
 		self.insert_node(key,None)
 		
@@ -69,7 +74,6 @@ class linked_list(object):
 	def insert_node(self, key, prev_key):
 		prev = self.search(prev_key)
 		next = self.get_node(prev).next
-			
 		new = self.Node(key,next)
 		current=len(self.list)
 		if self.double_linked:
@@ -106,14 +110,10 @@ class linked_list(object):
 			self.get_node(next_index).prev= prev_index
 		self.list[node_index] = 0
 		return out
-		
-pointers = range(0,10)
 
-list1 = linked_list(pointer_array=pointers)	
-pointers.append(0)
-list2 = linked_list(pointer_array=pointers,init = len(pointers)-1)
 def union(list1,list2,double_link):
 	first_node1 = list1.get_node(list1.root.next)
 	last_node2 = list2.get_node(list1.last)
 	first_node1.prev = list1.last
 	last_node2.next = list1.root.next
+	
